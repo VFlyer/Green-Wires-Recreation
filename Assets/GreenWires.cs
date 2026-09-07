@@ -31,13 +31,13 @@ public class GreenWires : MonoBehaviour {
     // Use this for initialization
     void Start () {
 	    
-	}
+    }
 	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 		
-	}
-     void Awake()
+    }
+    void Awake()
     {
         rule_taken = 0;
         _moduleID = _moduleIdCounter++;
@@ -80,6 +80,7 @@ public class GreenWires : MonoBehaviour {
         }
             if (battery == 1)
             {
+                retryWires:
                 for (int j = 0; j < Wires.Length; j++)
                 {
                     if (colors[j] % 4 == 0)
@@ -88,6 +89,16 @@ public class GreenWires : MonoBehaviour {
                         Debug.LogFormat("[Green Wires #{0}] Wire #{1} is Brunswick Green, Green, or Olive.", _moduleID, j);
                         rule_taken = 1;
                     }
+                }
+                if (!cutable_wires.Any())
+                {
+                    for (int i = 0; i < Wires.Length; i++)
+                    {
+                        colors[i] = Rnd.Range(0, possibleColors.Count() - 1);
+                        Wires[i].GetComponent<MeshRenderer>().material.color = possibleColors[colors[i]];
+                        ColorText[i].text = colorNames[colors[i]].ToString();
+                    }
+                    goto retryWires;
                 }
             }
             else if (purple_wire == 1)
